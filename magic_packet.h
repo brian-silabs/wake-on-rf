@@ -18,6 +18,10 @@
 #define MAGIC_PACKET_DEFAULT_TTL        0x3
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief Error codes returned by the magic packet decoding functions.
  *
@@ -115,5 +119,9 @@ MagicPacketError_t decodeMagicPacket(uint8_t *packetBuffer);
  * @return MagicPacketError_t The result of the event handling operation.
  */
 MagicPacketError_t magicPacketCallback(MagicPacketCallbackEvent_t event, void *data);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // MAGIC_PACKET_H
