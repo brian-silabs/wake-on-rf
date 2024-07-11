@@ -126,6 +126,15 @@ MagicPacketError_t decodeMagicPacket(uint8_t *packetBuffer);
 
 
 /**
+ * @brief Sends a magic packet with the provided payload.
+ *
+ * @param magicPayload_a The payload to include in the magic packet.
+ * @return MagicPacketError_t The result of the send operation.
+ */
+MagicPacketError_t sendMagicPacket(const MagicPacketPayload_t *magicPayload_a);
+
+
+/**
  * @brief Callback function for handling magic packet events.
  *
  * @param event The type of magic packet event that occurred.

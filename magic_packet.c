@@ -41,7 +41,6 @@ static uint8_t      txBuffer[MAX_PAYLOAD_LENGTH] = {0x00};// Temp Tx Buffer
 static uint8_t      eventBuffer[MAX_EVENT_DATA_LENGTH] = {0x00}; // Temp event buffer
 
 static uint8_t validateMagicPayloadFC(const MagicPacketPayload_t *magicPayload_a);
-static void retransmitMagicPacket(const MagicPacketPayload_t *magicPayload_a);
 
 void enableMagicPacketFilter(MagicPacketEnablePayload_t *enablePayload_a)
 {
@@ -111,7 +110,7 @@ MagicPacketError_t decodeMagicPacket(uint8_t *packetBuffer_a)
           // We are good to proceed with a wake up
           if(magicPayload->timeToLive > 0){
               magicPayload->timeToLive--;
-              retransmitMagicPacket(magicPayload);
+              sendMagicPacket(magicPayload);
           }
           memcpy(eventBuffer, magicPayload, MAGIC_PACKET_PAYLOAD_LENGTH);//REUSE - Can be put in single static with NULL test on data
           magicPacketCallback(MAGIC_PACKET_EVENT_WAKE_RX, (void*)eventBuffer);
@@ -139,11 +138,20 @@ static uint8_t validateMagicPayloadFC(const MagicPacketPayload_t *magicPayload_a
     }
 }
 
-static void retransmitMagicPacket(const MagicPacketPayload_t *magicPayload_a)
+MagicPacketError_t sendMagicPacket(const MagicPacketPayload_t *magicPayload_a)
 {
-    createMagicPacket(MAGIC_PACKET_SRC_ADDRESS, MAGIC_PACKET_DEST_ADDRESS, panId_g, &txBuffer[1], magicPayload_a);
-    txBuffer[0] = HEADER_802154_LENGTH + MAGIC_PACKET_PAYLOAD_LENGTH + CRC_802154_LENGTH; // Separating size management as might be defferent in RAIL or OT
-    magicPacketCallback(MAGIC_PACKET_EVENT_TX, (void*)txBuffer);
+    MagicPacketError_t ret = MAGIC_PACKET_SUCCESS;
+
+    if(filterEnabled_g)
+    {
+        createMagicPacket(MAGIC_PACKET_SRC_ADDRESS, MAGIC_PACKET_DEST_ADDRESS, panId_g, &txBuffer[1], magicPayload_a);
+        txBuffer[0] = HEADER_802154_LENGTH + MAGIC_PACKET_PAYLOAD_LENGTH + CRC_802154_LENGTH; // Separating size management as might be defferent in RAIL or OT
+        magicPacketCallback(MAGIC_PACKET_EVENT_TX, (void*)txBuffer);
+    } else {
+        ret = MAGIC_PACKET_ERROR_DISABLED;
+    }
+
+    return ret;
 }
 
 SL_WEAK MagicPacketError_t magicPacketCallback(MagicPacketCallbackEvent_t event, void *data)
