@@ -6,14 +6,11 @@
 #define MAX_PAYLOAD_LENGTH              128
 #define MAX_EVENT_DATA_LENGTH           20
 
-#define HEADER_802154_LENGTH            9 // Check if better than sizeof
 #define HEADER_802154_FC_SHIFT          0
 #define HEADER_802154_SEQ_SHIFT         2
 #define HEADER_802154_PANID_SHIFT       3
 #define HEADER_802154_DEST_SHIFT        5
 #define HEADER_802154_SRC_SHIFT         7
-
-#define CRC_802154_LENGTH               2
 
 #define MAGIC_PACKET_FC                 0x9841 //Data Frame, No Security, No Frame Pending, No Ack Required, PanID compressed, 2003 ver, Short Dest Address, Short Source Address
 #define MAGIC_PACKET_SRC_ADDRESS        0xFFFF

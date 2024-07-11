@@ -11,6 +11,20 @@
 #define MAGIC_PACKET_PAYLOAD_LENGTH     3
 
 /**
+ * @brief The length of the 802.15.4 header in bytes.
+ *
+ * @note This constant defines the expected length of the 802.15.4 header, which is used in the magic packet implementation.
+ */
+#define HEADER_802154_LENGTH            9
+
+/**
+ * @brief The length of the 802.15.4 CRC in bytes.
+ *
+ * @note This constant defines the expected length of the 802.15.4 CRC, which is used in the magic packet implementation.
+ */
+#define CRC_802154_LENGTH               2
+
+/**
  * @brief The default time-to-live (TTL) value for magic packets.
  *
  * @note This constant defines the default TTL value that will be used when creating a magic packet. The TTL is used to limit the number of hops a magic packet can traverse before it is discarded.
