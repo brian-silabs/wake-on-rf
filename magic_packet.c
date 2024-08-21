@@ -64,6 +64,25 @@ void disableMagicPacketFilter(void)
     magicPacketCallback(MAGIC_PACKET_EVENT_DISABLED, NULL);
 }
 
+uint8_t isMagicPacketFilterEnabled(void)
+{
+    return filterEnabled_g;
+}
+
+void getMagicPacketFilterOptions(MagicPacketEnablePayload_t *enablePayload_a)
+{
+    enablePayload_a->panId = panId_g;
+    enablePayload_a->channel = monitoredChannel_g;
+    enablePayload_a->borderRouter = amBorderRouter_g;
+}
+
+void getMagicPacketFilterWakeTxOptions(MagicPacketPayload_t *wakeTxPayload_a)
+{
+    wakeTxPayload_a->timeToLive = MAGIC_PACKET_DEFAULT_TTL;
+    wakeTxPayload_a->frameCounter = magicPacketLastFC_g;
+    wakeTxPayload_a->status = amBorderRouter_g;
+}
+
 // Forge a magic 802.15.4 packet
 void createMagicPacket(uint16_t srcAddress_a, uint16_t destAddress_a, uint16_t panID_a, uint8_t *packetBuffer_a, const MagicPacketPayload_t *magicPayload_a)
 {
